@@ -1,10 +1,13 @@
-import React, { useState } from "react";
+import React, { useReducer, useState } from "react";
+import personReducer from "./reducer/person-reducer";
 
 export default function AppMentors() {
-  const [person, setPerson] = useState(initialPerson);
+  //const [person, setPerson] = useState(initialPerson);
+  const [person, dispatch] = useReducer(personReducer, initialPerson);
   const handleUpdate = () => {
     const prev = prompt(`which mentor's name needs to be changed?`);
     const current = prompt(`What is the name?`);
+    dispatch({ type: "updated", prev, current });
     /*setPerson((prevPerson) => {
       const updatedMentors = prevPerson.mentors.map((mentor) => {
         if (mentor.name === prev) {
@@ -15,7 +18,8 @@ export default function AppMentors() {
 
       return { ...prevPerson, mentors: updatedMentors };
     });*/
-    setPerson((person) => ({
+    //use Reduer's dispatch instead
+    /*setPerson((person) => ({
       ...person,
       mentors: person.mentors.map((mentor) => {
         if (mentor.name === prev) {
@@ -23,24 +27,33 @@ export default function AppMentors() {
         }
         return mentor;
       }),
-    }));
+    }));*/
   };
   const handleAdd = () => {
-    const addName = prompt(`Enter a new mentor's name`);
+    //my solution
+    /*const addName = prompt(`Enter a new mentor's name`);
     const addTitle = prompt(`Enter a new mentor's Title`);
     const newMentor = { name: addName, title: addTitle };
     const updatedPerson = {
       ...person,
       mentors: [...person.mentors, newMentor],
     };
-    setPerson(updatedPerson);
+    setPerson(updatedPerson);*/
+    const name = prompt(`Enter a new mentor's name`);
+    const title = prompt(`Enter a new mentor's Title`);
+    dispatch({ type: "added", name, title });
+    /*setPerson((person) => ({
+      ...person,
+      mentors: [{ name, title }, ...person.mentors],
+    }));*/
   };
   const handleDelete = () => {
-    const remove = prompt(`Enter the mentor name for deleting?`);
-    setPerson((person) => ({
+    const name = prompt(`Enter the mentor name for deleting?`);
+    dispatch({ type: "deleted", name });
+    /*setPerson((person) => ({
       ...person,
-      mentors: person.mentors.filter((mentor) => mentor.name !== remove),
-    }));
+      mentors: person.mentors.filter((mentor) => mentor.name !== name),
+    }));*/
   };
   return (
     <div>
