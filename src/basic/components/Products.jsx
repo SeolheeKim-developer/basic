@@ -1,26 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
+import useProducts from "../../hooks/use-products";
 
 export default function Products() {
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(undefined);
-  const [products, setProducts] = useState([]);
   const [checked, setChecked] = useState(false);
+  const [loading, error, products] = useProducts({ salesOnly: checked });
+
   const handleChange = () => setChecked((prev) => !prev);
-  useEffect(() => {
-    setLoading(true);
-    setError(undefined);
-    fetch(`data/${checked ? "sale_" : ""}products.json`)
-      .then((res) => res.json())
-      .then((data) => {
-        console.log("🔥Took the data from network");
-        setProducts(data);
-      })
-      .catch((e) => setError("error!"))
-      .finally(() => setLoading(false));
-    return () => {
-      console.log("clean");
-    };
-  }, [checked]);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>{error}</p>;
